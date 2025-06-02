@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 class LoginField extends StatelessWidget {
   final IconData icon;
   final String hint;
+  final TextEditingController controller;
   const LoginField({
     required this.icon,
     required this.hint,
+    required this.controller,
     super.key,
   });
 
@@ -22,6 +24,7 @@ class LoginField extends StatelessWidget {
           child: Padding(
             padding: const EdgeInsets.all(8.0),
             child: TextField(
+              controller: controller,
               keyboardType: hint == 'Password'
                   ? TextInputType.visiblePassword
                   : TextInputType.emailAddress,

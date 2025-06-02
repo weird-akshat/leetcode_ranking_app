@@ -1,16 +1,18 @@
 import 'package:flutter/material.dart';
 
 class RankingCard extends StatelessWidget {
-  const RankingCard(
-      {super.key,
-      required this.position,
-      required this.name,
-      required this.image,
-      required this.profileId,
-      required this.numOfQues,
-      required this.easy,
-      required this.hard,
-      required this.medium});
+  const RankingCard({
+    super.key,
+    required this.position,
+    required this.name,
+    required this.image,
+    required this.profileId,
+    required this.numOfQues,
+    required this.easy,
+    required this.hard,
+    required this.medium,
+  });
+
   final String position;
   final String numOfQues;
   final String name;
@@ -19,104 +21,91 @@ class RankingCard extends StatelessWidget {
   final String easy;
   final String medium;
   final String hard;
+
   @override
   Widget build(BuildContext context) {
-    Color color = Color(0xff1E1E1E);
-    if (position == '5') {
-      color = Colors.white;
-    }
+    final Color cardColor = const Color(0xff1E1E1E);
+
     return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: LayoutBuilder(
-        builder: (context, constraints) => Row(
-          mainAxisAlignment: MainAxisAlignment.spaceAround,
+      padding: const EdgeInsets.symmetric(horizontal: 12.0, vertical: 6.0),
+      child: Container(
+        decoration: BoxDecoration(
+          color: cardColor,
+          borderRadius: BorderRadius.circular(50),
+          boxShadow: const [BoxShadow(color: Colors.black26, blurRadius: 6)],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+        child: Row(
           children: [
+            // Fixed width for position
             SizedBox(
-              width: constraints.maxWidth * 1 / 5,
+              width: 40,
               child: Center(
                 child: Text(
-                  position.toString(),
-                  style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: constraints.maxWidth * .05),
+                  position,
+                  style: const TextStyle(
+                    fontWeight: FontWeight.w600,
+                    fontSize: 16,
+                  ),
                 ),
               ),
             ),
-            SizedBox(
-              width: constraints.maxWidth * 4 / 5,
-              // height: MediaQuery.of(context).size.height * .10,
-              child: AspectRatio(
-                aspectRatio: 16 / 4,
-                child: Material(
-                  // color: Color(),
-                  color: color,
-                  borderRadius: BorderRadius.circular(50),
-                  elevation: 10,
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      CircleAvatar(
-                        backgroundColor: const Color.fromARGB(255, 26, 38, 48),
-                        backgroundImage: NetworkImage(image),
-                      ),
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(name,
-                              style: TextStyle(
-                                  fontSize: 18,
-                                  color: Colors.blueGrey,
-                                  fontWeight: FontWeight.bold)),
-                          Text(
-                            profileId,
-                            style:
-                                TextStyle(fontSize: 14, color: Colors.blueGrey),
-                          )
-                        ],
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceAround,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              easy,
-                              style: TextStyle(color: Colors.green),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              medium,
-                              style: TextStyle(color: Colors.orangeAccent),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              hard,
-                              style: TextStyle(color: Colors.redAccent),
-                            ),
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: Text(
-                              numOfQues.toString(),
-                              style: TextStyle(
-                                  color: Colors.blue,
-                                  fontWeight: FontWeight.w700),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ),
+
+            const SizedBox(width: 12),
+
+            // Avatar
+            CircleAvatar(
+              radius: 22,
+              backgroundColor: const Color.fromARGB(255, 26, 38, 48),
+              backgroundImage: NetworkImage(image),
+            ),
+
+            const SizedBox(width: 16),
+
+            // Name and profileId
+            Expanded(
+              flex: 2,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(name,
+                      style: const TextStyle(
+                          fontSize: 12,
+                          color: Colors.blueGrey,
+                          fontWeight: FontWeight.bold)),
+                  Text(profileId,
+                      style:
+                          const TextStyle(fontSize: 10, color: Colors.blueGrey))
+                ],
+              ),
+            ),
+
+            // Stats
+            Expanded(
+              flex: 3,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  _buildStat(easy, Colors.green),
+                  _buildStat(medium, Colors.orangeAccent),
+                  _buildStat(hard, Colors.redAccent),
+                  _buildStat(numOfQues, Colors.blue, bold: true),
+                ],
               ),
             )
           ],
         ),
+      ),
+    );
+  }
+
+  Widget _buildStat(String text, Color color, {bool bold = false}) {
+    return Text(
+      text,
+      style: TextStyle(
+        color: color,
+        fontWeight: bold ? FontWeight.w700 : FontWeight.normal,
+        fontSize: 14,
       ),
     );
   }
